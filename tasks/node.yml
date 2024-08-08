@@ -1,0 +1,17 @@
+- name: Install nodejs and npm
+  apt:
+    name:
+      - nodejs
+      - npm
+  tags:
+    - node
+- name: Install n
+  npm:
+    name: n
+    global: yes
+  tags:
+    - node
+- name: Install lts nodejs
+  shell: n lts
+  tags:
+    - node

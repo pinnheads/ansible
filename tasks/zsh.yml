@@ -1,0 +1,27 @@
+- name: Install zsh
+  apt:
+    name: zsh
+  tags:
+    - zsh
+- name: Set zsh as default shell
+  shell: chsh -s `which zsh`
+  tags:
+    - zsh
+- name: Install oh-my-zsh
+  shell: curl -L https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh | sh
+  tags:
+    - zsh
+- name: Install zsh-autosuggestions
+  ansible.builtin.git:
+    repo: https://github.com/zsh-users/zsh-autosuggestions.git
+    dest: ~/.oh-my-zsh/custom/plugins/zsh-autosuggestions
+  tags:
+    - zsh
+- name: Update our zshrc
+  shell: sed -i 's/plugins=(git)/plugins=(git zsh-autosuggestions)/' ~/.zshrc
+  tags:
+    - zsh
+- name: set theme to fino
+  shell: sed -i 's/ZSH_THEME="robbyrussell"/ZSH_THEME="fino"/' ~/.zshrc
+  tags:
+    - zsh

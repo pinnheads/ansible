@@ -1,0 +1,15 @@
+- hosts: localhost
+  become: true
+  pre_tasks:
+    - name: Update apt
+      apt:
+        force_apt_get: yes
+        update_cache: yes
+        state: present
+      tags:
+        - node
+        - zsh
+  tasks:
+    - include: tasks/zsh.yml
+    - include: tasks/node.yml
+    
