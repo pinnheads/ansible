@@ -1,6 +1,6 @@
 <div align = "center">
 
-<h1><a href="https://github.com/pinnheads/repo-template">repo-template</a></h1>
+<h1><a href="https://github.com/pinnheads/repo-template">Personal Ansible</a></h1>
 
 <a href="https://github.com/pinnheads/repo-template/blob/main/LICENSE">
 <img alt="License" src="https://img.shields.io/github/license/pinnheads/repo-template?style=flat&color=eee&label="> </a>
