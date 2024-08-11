@@ -17,11 +17,11 @@
     dest: ~/.oh-my-zsh/custom/plugins/zsh-autosuggestions
   tags:
     - zsh
-- name: Update our zshrc
-  shell: sed -i 's/plugins=(git)/plugins=(git zsh-autosuggestions)/' ~/.zshrc
-  tags:
-    - zsh
-- name: set theme to fino
-  shell: sed -i 's/ZSH_THEME="robbyrussell"/ZSH_THEME="fino"/' ~/.zshrc
-  tags:
-    - zsh
+# - name: Update our zshrc
+#   shell: sed -i 's/plugins=(git)/plugins=(git zsh-autosuggestions)/' ~/.zshrc
+#   tags:
+#     - zsh
+# - name: set theme to fino
+#   shell: sed -i 's/ZSH_THEME="robbyrussell"/ZSH_THEME="fino"/' ~/.zshrc
+#   tags:
+#     - zsh
