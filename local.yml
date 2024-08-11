@@ -18,4 +18,5 @@
     - include_tasks: tasks/zsh.yml
     - include_tasks: tasks/node.yml
     - include_tasks: tasks/ssh.yml
+    - include_tasks: tasks/dotfiles.yml
     
