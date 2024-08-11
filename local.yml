@@ -16,7 +16,18 @@
     dest_key: "{{ lookup('env', 'HOME') }}/.ssh/id_rsa"
   tasks:
     - include_tasks: tasks/zsh.yml
+      tags:
+        - zsh
     - include_tasks: tasks/node.yml
+      tags:
+        - node
     - include_tasks: tasks/ssh.yml
+      tags:
+        - ssh
+        - dotfiles
+        - install
     - include_tasks: tasks/dotfiles.yml
+      tags:
+        - dotfiles
+        - install
     
