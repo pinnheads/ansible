@@ -61,11 +61,3 @@
   tags:
     - docker
     - install
-- name: Start and enable Docker service
-  service:
-    name: docker
-    state: started
-    enabled: yes
-  tags:
-    - docker
-    - install
