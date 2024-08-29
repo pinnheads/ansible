@@ -18,30 +18,25 @@
   tasks:
     - include_tasks: 
         file: tasks/zsh.yml
-        apply:
-          tags:
-            - zsh
+      tags:
+        - zsh
     - include_tasks: 
         file: tasks/node.yml
-        apply:
-          tags:
-            - node
+      tags:
+        - node
     - include_tasks: 
         file: tasks/ssh.yml
-        apply:
-          tags:
-            - ssh
-            - dotfiles
-            - install
+      tags:
+        - ssh
+        - dotfiles
+        - install
     - include_tasks: 
         file: tasks/dotfiles.yml
-        apply:
-          tags:
-            - dotfiles
-            - install
+      tags:
+        - dotfiles
+        - install
     - include_tasks:
         file: tasks/docker.yml
-        apply:
-          tags:
-            - docker
-            - install
+      tags:
+        - docker
+        - install
