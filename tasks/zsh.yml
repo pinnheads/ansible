@@ -26,3 +26,7 @@
     src: ~/.zshrc
     dest: ~/.zshrc.backup
   when: zshrc_file.stat.exists
+- name: Remove the original .zshrc file
+  file:
+    path: ~/.zshrc
+    state: absent
