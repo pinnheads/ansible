@@ -10,6 +10,7 @@
         - node
         - zsh
         - ssh
+        - docker
         - dotfiles
   vars:
     source_key: "./.ssh/id_rsa"
@@ -37,4 +38,10 @@
         apply:
           tags:
             - dotfiles
+            - install
+    - include_tasks:
+        file: tasks/docker.yml
+        apply:
+          tags:
+            - docker
             - install
