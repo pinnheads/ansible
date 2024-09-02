@@ -12,6 +12,7 @@
         - ssh
         - docker
         - dotfiles
+        - productivity
   vars:
     source_key: "./.ssh/id_rsa"
     dest_key: "{{ lookup('env', 'HOME') }}/.ssh/id_rsa"
@@ -24,6 +25,11 @@
         file: tasks/node.yml
       tags:
         - node
+    - include_tasks:
+        file: tasks/productivity-tools.yml
+      tags:
+        - productivity
+        - install
     - include_tasks: 
         file: tasks/ssh.yml
       tags:
