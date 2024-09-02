@@ -1,7 +1,8 @@
 - hosts: localhost
-  become: true
+  # become: true
   pre_tasks:
     - name: Update apt
+      become: true
       apt:
         force_apt_get: yes
         update_cache: yes
@@ -45,4 +46,9 @@
         file: tasks/docker.yml
       tags:
         - docker
+        - install
+    - include_tasks:
+        file: tasks/font.yml
+      tags:
+        - font
         - install

@@ -1,0 +1,49 @@
+- name: Ensure the necessary dependencies are installed
+  apt:
+    name: unzip
+    state: present
+  tags:
+    - font
+    - install
+- name: Download JetBrains Mono Nerd Font
+  become: true
+  get_url:
+    url: "https://github.com/ryanoasis/nerd-fonts/releases/download/v3.0.2/JetBrainsMono.zip"
+    dest: "/tmp/JetBrainsMonoNerdFont.zip"
+  tags:
+    - font
+    - install
+- name: Unzip JetBrains Mono Nerd Font
+  become: true
+  unarchive:
+    src: "/tmp/JetBrainsMonoNerdFont.zip"
+    dest: "/tmp/"
+    remote_src: yes
+  tags:
+    - font
+    - install
+- name: Find all TTF files in /tmp
+  find:
+    paths: /tmp
+    patterns: "*.ttf"
+  register: ttf_files
+  tags:
+    - font
+    - install
+- name: Copy TTF files to /usr/local/share/fonts/
+  copy:
+    src: "{{ item.path }}"
+    dest: "/usr/local/share/fonts/"
+    owner: root
+    group: root
+    mode: '0644'
+  with_items: "{{ ttf_files.files }}"
+  become: true
+  tags:
+    - font
+    - install
+- name: Refresh the font cache
+  command: fc-cache -f -v
+  tags:
+    - font
+    - install

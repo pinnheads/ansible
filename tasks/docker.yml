@@ -1,10 +1,12 @@
 - name: Update apt package index
+  become: true
   apt:
     update_cache: yes
   tags:
     - docker
     - install
 - name: Install required packages
+  become: true
   apt:
     name:
       - ca-certificates
@@ -14,6 +16,7 @@
     - docker
     - install
 - name: Create directory for apt keyrings
+  become: true
   file:
     path: /etc/apt/keyrings
     state: directory
@@ -22,6 +25,7 @@
     - docker
     - install
 - name: Download Docker's GPG key
+  become: true
   get_url:
     url: https://download.docker.com/linux/ubuntu/gpg
     dest: /etc/apt/keyrings/docker.asc
@@ -30,18 +34,21 @@
     - docker
     - install
 - name: Add Docker repository to apt sources
+  become: true
   shell: |
         echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu $(. /etc/os-release && echo \"$VERSION_CODENAME\") stable" | tee /etc/apt/sources.list.d/docker.list > /dev/null
   tags:
     - docker
     - install
 - name: Update apt package index again
+  become: true
   apt:
     update_cache: yes
   tags:
     - docker
     - install
 - name: Install Docker
+  become: true
   apt:
     name: 
       - docker-ce
@@ -62,6 +69,7 @@
     - docker
     - install
 - name: Start and enable Docker service
+  become: true
   service:
     name: docker
     state: started
