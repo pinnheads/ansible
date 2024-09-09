@@ -5,7 +5,14 @@
   tags:
     - zsh
 - name: Set zsh as default shell
+  become: true
   shell: chsh -s `which zsh`
+  tags:
+    - zsh
+- name: Remove oh-my-zsh folder if it is present
+  file:
+    path: ~/.oh-my-zsh
+    state: absent
   tags:
     - zsh
 - name: Install oh-my-zsh
@@ -22,12 +29,18 @@
   stat:
     path: ~/.zshrc
   register: zshrc_file
+  tags:
+    - zsh
 - name: Backup existing .zshrc file
   copy:
     src: ~/.zshrc
     dest: ~/.zshrc.backup
+  tags:
+    - zsh
   when: zshrc_file.stat.exists
 - name: Remove the original .zshrc file
   file:
     path: ~/.zshrc
     state: absent
+  tags:
+    - zsh

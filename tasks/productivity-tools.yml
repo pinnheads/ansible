@@ -1,7 +1,7 @@
 - name: Install packages
   become: true
   apt:
-    name: [ "tmux", "fzf", "tldr"]
+    name: [ "tmux", "fzf", "tldr", "xterm"]
   tags:
     - install
     - productivity
