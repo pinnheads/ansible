@@ -50,7 +50,7 @@
 - name: Install Docker
   become: true
   apt:
-    name: 
+    name:
       - docker-ce
       - docker-ce-cli
       - containerd.io
@@ -61,6 +61,7 @@
     - docker
     - install
 - name: Add user to docker group
+  become: true
   user:
     name: "{{ ansible_user_id }}"
     groups: docker
