@@ -18,11 +18,11 @@
     source_key: "./.ssh/id_rsa"
     dest_key: "{{ lookup('env', 'HOME') }}/.ssh/id_rsa"
   tasks:
-    - include_tasks: 
+    - include_tasks:
         file: tasks/zsh.yml
       tags:
         - zsh
-    - include_tasks: 
+    - include_tasks:
         file: tasks/node.yml
       tags:
         - node
@@ -31,13 +31,19 @@
       tags:
         - productivity
         - install
-    - include_tasks: 
+    - include_tasks:
         file: tasks/ssh.yml
       tags:
         - ssh
         - dotfiles
         - install
-    - include_tasks: 
+    - include_tasks:
+        file: tasks/nvim-setup.yml
+      tags:
+        - install
+        - nvim
+        - neovim
+    - include_tasks:
         file: tasks/dotfiles.yml
       tags:
         - dotfiles

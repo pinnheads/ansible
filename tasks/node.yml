@@ -7,12 +7,14 @@
   tags:
     - node
 - name: Install n
+  become: true
   npm:
     name: n
     global: yes
   tags:
     - node
 - name: Install lts nodejs
+  become: true
   shell: n lts
   tags:
     - node

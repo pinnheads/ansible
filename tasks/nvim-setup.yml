@@ -1,0 +1,43 @@
+- name: Install dependencies
+  become: true
+  apt:
+    name:
+      - curl
+      - build-essential
+      - libssl-dev
+    state: present
+    update_cache: yes
+  tags:
+    - install
+    - neovim
+- name: Install Rust and Cargo
+  shell: |
+    curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
+  args:
+    creates: /root/.cargo/bin/cargo
+  environment:
+    HOME: "{{ ansible_env.HOME }}"
+  become_user: "{{ ansible_user_id }}"
+  tags:
+    - install
+    - neovim
+- name: Install bob (Neovim version manager)
+  shell: |
+    cargo install --git https://github.com/MordechaiHadad/bob.git
+  args:
+    creates: "{{ ansible_env.HOME }}/.local/share/bob/bob"
+  environment:
+    HOME: "{{ ansible_env.HOME }}"
+  become_user: "{{ ansible_user_id }}"
+  tags:
+    - install
+    - neovim
+- name: Install stable version of nvim
+  shell: |
+    bob use stable
+  environment:
+    HOME: "{{ ansible_env.HOME }}"
+  become_user: "{{ ansible_user_id }}"
+  tags:
+    - install
+    - neovim
