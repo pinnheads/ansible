@@ -1,7 +1,7 @@
 - name: Install packages
   become: true
   apt:
-    name: [ "tmux", "fzf", "tldr", "xterm", "cmake"]
+    name: [ "tmux", "pip", "fzf", "tldr", "xterm", "cmake"]
   tags:
     - install
     - productivity
