@@ -37,7 +37,7 @@
         - ssh
         - dotfiles
         - install
-     - include_tasks:
+    - include_tasks:
         file: tasks/dotfiles.yml
       tags:
         - dotfiles
