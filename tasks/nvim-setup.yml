@@ -23,9 +23,10 @@
     - neovim
 - name: Install bob (Neovim version manager)
   shell: |
-    source ~/.bashrc && cargo install --git https://github.com/MordechaiHadad/bob.git
+    cargo install --git https://github.com/MordechaiHadad/bob.git
   args:
     creates: "{{ ansible_env.HOME }}/.local/share/bob/bob"
+    executable: /bin/zsh
   environment:
     HOME: "{{ ansible_env.HOME }}"
   become_user: "{{ ansible_user_id }}"
@@ -35,6 +36,8 @@
 - name: Install stable version of nvim
   shell: |
     bob use stable
+  args:
+    executable: /bin/zsh
   environment:
     HOME: "{{ ansible_env.HOME }}"
   become_user: "{{ ansible_user_id }}"
