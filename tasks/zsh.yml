@@ -56,3 +56,9 @@
     state: absent
   tags:
     - zsh
+- name: Remove the original .bashrc file
+  file:
+    path: ~/.bashrc
+    state: absent
+  tags:
+    - zsh
