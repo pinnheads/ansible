@@ -23,7 +23,7 @@
     - neovim
 - name: Install bob (Neovim version manager)
   shell: |
-    cargo install --git https://github.com/MordechaiHadad/bob.git
+    source ~/.bashrc && cargo install --git https://github.com/MordechaiHadad/bob.git
   args:
     creates: "{{ ansible_env.HOME }}/.local/share/bob/bob"
   environment:
