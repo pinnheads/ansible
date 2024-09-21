@@ -34,7 +34,19 @@
 - name: Backup existing .zshrc file
   copy:
     src: ~/.zshrc
-    dest: ~/.zshrc.backup
+    dest: ~/.zshrc.bak
+  tags:
+    - zsh
+- name: Check if bashrc file exists
+  stat:
+    path: ~/.bashrc
+  register: zshrc_file
+  tags:
+    - zsh
+- name: Backup existing .bashrc file
+  copy:
+    src: ~/.bashrc
+    dest: ~/.bashrc.bak
   tags:
     - zsh
   when: zshrc_file.stat.exists
