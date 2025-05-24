@@ -35,7 +35,7 @@
     - neovim
 - name: Install stable version of nvim
   shell: |
-    bob use stable
+    bob use stable --yes
   args:
     executable: /bin/zsh
   environment:
