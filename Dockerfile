@@ -3,7 +3,7 @@
 # docker build --tag <image name> .
 # docker run --rm -it <image name> bash
 
-FROM ubuntu:focal AS base
+FROM ubuntu:noble AS base
 WORKDIR /usr/local/bin
 ENV DEBIAN_FRONTEND=noninteractive
 RUN apt-get update && \

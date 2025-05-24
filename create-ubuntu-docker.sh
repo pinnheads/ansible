@@ -1,8 +1,8 @@
 #!/bin/bash
 
 # Name of the container
-CONTAINER_NAME="ubuntu-focal-container"
-IMAGE_NAME="ubuntu-focal-image"
+CONTAINER_NAME="ubuntu-noble-container"
+IMAGE_NAME="ubuntu-noble-image"
 
 # Check if the container exists
 if [ $(docker ps -a -q -f name=${CONTAINER_NAME}) ]; then
@@ -13,10 +13,10 @@ if [ $(docker ps -a -q -f name=${CONTAINER_NAME}) ]; then
     docker rm ${CONTAINER_NAME}
 fi
 
-echo "Creating a new Ubuntu focal container..."
+echo "Creating a new ${CONTAINER_NAME}..."
 
 # Pull the latest Ubuntu LTS image (if not already pulled)
-docker pull ubuntu:focal
+docker pull ubuntu:noble
 
 # Create a new build image
 docker build - < Dockerfile
