@@ -25,40 +25,25 @@
     dest: ~/.oh-my-zsh/custom/plugins/zsh-autosuggestions
   tags:
     - zsh
-- name: Check if .zshrc file exists
-  stat:
-    path: ~/.zshrc
+- name: Check if ~/.zshrc file is present
+  ansible.builtin.stat:
+    path: "{{ansible_env.HOME}}/.zshrc"
   register: zshrc_file
-  tags:
-    - zsh
-- name: Backup existing .zshrc file
-  copy:
-    src: ~/.zshrc
-    dest: ~/.zshrc.bak
-  tags:
-    - zsh
-- name: Check if bashrc file exists
-  stat:
-    path: ~/.bashrc
-  register: zshrc_file
-  tags:
-    - zsh
-- name: Backup existing .bashrc file
-  copy:
-    src: ~/.bashrc
-    dest: ~/.bashrc.bak
-  tags:
-    - zsh
-  when: zshrc_file.stat.exists
 - name: Remove the original .zshrc file
   file:
-    path: ~/.zshrc
+    path: "{{ansible_env.HOME}}/.zshrc"
     state: absent
+  when: zshrc_file.stat.exists
   tags:
     - zsh
+- name: Check if ~/.bashrc file is present
+  ansible.builtin.stat:
+    path: "{{ansible_env.HOME}}/.bashrc"
+  register: bashrc_file
 - name: Remove the original .bashrc file
   file:
-    path: ~/.bashrc
+    path: "{{ansible_env.HOME}}/.bashrc"
     state: absent
+  when: bashrc_file.stat.exists
   tags:
     - zsh
