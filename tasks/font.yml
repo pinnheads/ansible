@@ -45,6 +45,7 @@
     - install
 - name: Refresh the font cache
   command: fc-cache -f -v
+  ignore_errors: true
   tags:
     - font
     - install

@@ -41,6 +41,7 @@
   environment:
     HOME: "{{ ansible_env.HOME }}"
   become_user: "{{ ansible_user_id }}"
+  ignore_errors: true
   tags:
     - install
     - neovim

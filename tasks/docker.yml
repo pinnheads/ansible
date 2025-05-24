@@ -75,6 +75,7 @@
     name: docker
     state: started
     enabled: yes
+  ignore_errors: true
   tags:
     - docker
     - install
