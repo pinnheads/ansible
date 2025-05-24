@@ -1,7 +1,8 @@
 - name: Install packages
   become: true
   apt:
-    name: [ "tmux", "pip", "fzf", "tldr", "cmake" ]
+    name: [ "tmux", "pip", "fzf", "tldr", "cmake", "alacritty", "ripgrep"]
+  ignore_errors: true
   tags:
     - install
     - productivity
