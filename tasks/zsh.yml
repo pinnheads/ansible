@@ -1,7 +1,7 @@
 - name: Install zsh
   become: true
   apt:
-    name: zsh
+    name: [ "zsh", "curl" ]
   tags:
     - zsh
 - name: Set zsh as default shell
