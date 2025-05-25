@@ -1,0 +1,82 @@
+- name: Install build dependencies on Ubuntu
+  become: true
+  apt:
+    name:
+      - cmake
+      - g++
+      - pkg-config
+      - libfontconfig1-dev
+      - libxcb-xfixes0-dev
+      - libxkbcommon-dev
+      - python3
+    state: present
+    update_cache: yes
+    tags:
+      - install
+      - alacritty
+
+- name: Clone Alacritty Source
+  git:
+    repo: https://github.com/alacritty/alacritty
+    dest: "{{ansible_env.HOME}}/alacritty"
+    version: master
+    update: yes
+  tags:
+    - install
+    - alacritty
+
+- name: Build Alacritty Release
+  shell: cargo build --release
+  args:
+    chdir: "{{ansible_env.HOME}}/alacritty"
+    creates: "{{ansible_env.HOME}}/alacritty/target/release/alacritty"
+    executable: /bin/zsh
+  tags:
+    - install
+    - alacritty
+
+- name: Install Alacritty binary
+  become: true
+  copy:
+    src: "{{ansible_env.HOME}}/alacritty/target/release/alacritty"
+    dest: /usr/local/bin/alacritty
+    mode: '0755'
+  tags:
+    - install
+    - alacritty
+
+- name: Install terminfo entry
+  become: true
+  command: tic -xe alacritty,alacritty-direct extra/alacritty.info
+  args:
+    chdir: "{{ansible_env.HOME}}/alacritty"
+  tags:
+    - install
+    - alacritty
+
+- name: Install desktop entry and icon
+  become: true
+  copy:
+    src: "{{ansible_env.HOME}}/alacritty/extra/linux/Alacritty.desktop"
+    dest: /usr/share/applications/Alacritty.desktop
+    mode: '0644'
+  tags:
+    - install
+    - alacritty
+
+- name: Install SVG icon
+  become: true
+  copy:
+    src: "{{ansible_env.HOME}}/alacritty/extra/logo/alacritty-term.svg"
+    dest: /usr/share/pixmaps/Alacritty.svg
+    mode: '0644'
+  tags:
+    - install
+    - alacritty
+
+- name: Update desktop database
+  become: true
+  command: update-desktop-database
+  tags:
+    - install
+    - alacritty
