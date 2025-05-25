@@ -11,9 +11,9 @@
       - python3
     state: present
     update_cache: yes
-    tags:
-      - install
-      - alacritty
+  tags:
+    - install
+    - alacritty
 
 - name: Clone Alacritty Source
   git:
