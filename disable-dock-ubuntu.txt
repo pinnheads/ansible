@@ -1,0 +1,2 @@
+cd /usr/share/gnome-shell/extensions/                                                                                                                                                                                                                                                                                           pinnheads@cypher-
+sudo mv ubuntu-dock@ubuntu.com{,.bak}
