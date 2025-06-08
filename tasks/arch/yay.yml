@@ -17,7 +17,6 @@
   tags: [install, yay]
 
 - name: Build and install yay using makepkg
-  become: true
   shell: |
     cd /opt/yay
     makepkg -si --noconfirm
