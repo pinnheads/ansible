@@ -9,7 +9,6 @@
   tags: [install, yay]
 
 - name: Clone yay AUR repository
-  become: true
   git:
     repo: https://aur.archlinux.org/yay.git
     dest: "{{ ansible_env.HOME }}/yay"
