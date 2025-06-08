@@ -1,8 +1,18 @@
-- name: Ensure the necessary dependencies are installed
+- name: Ensure the necessary dependencies are installed on Debian
   become: true
   apt:
     name: unzip
     state: present
+  when: ansible_facts["os_family"] == "Debian"
+  tags:
+    - font
+    - install
+- name: Ensure the necessary dependencies are installed on Arch
+  become: true
+  pacman:
+    name: unzip
+    state: present
+  when: ansible_facts["os_family"] == "Archlinux"
   tags:
     - font
     - install

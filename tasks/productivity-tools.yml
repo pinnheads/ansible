@@ -11,7 +11,7 @@
 - name: Install packages on Arch
   become: true
   pacman:
-    name: [ "tmux", "python-pip", "fzf", "tldr", "cmake", "alacritty", "ripgrep", "wofi"]
+    name: [ "tmux", "python-pip", "fzf", "tldr", "cmake", "alacritty", "ripgrep", "wofi", "openssh", "neovim"]
   ignore_errors: true
   when: ansible_facts["os_family"] == "Archlinux"
   tags:
