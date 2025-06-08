@@ -12,13 +12,13 @@
   become: true
   git:
     repo: https://aur.archlinux.org/yay.git
-    dest: /opt/yay
+    dest: "{{ ansible_env.HOME }}/yay"
     update: yes
   tags: [install, yay]
 
 - name: Build and install yay using makepkg
   shell: |
-    cd /opt/yay
+    cd "{{ ansible_env.HOME }}/yay"
     makepkg -si --noconfirm
   args:
     creates: /usr/bin/yay
