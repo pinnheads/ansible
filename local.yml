@@ -1,5 +1,6 @@
 - hosts: localhost
-  # become: true
+  gather_facts: yes
+
   pre_tasks:
     - name: Update apt
       become: true
@@ -7,6 +8,7 @@
         force_apt_get: yes
         update_cache: yes
         state: present
+      when: ansible_facts["os_family"] == "Debian"
       tags:
         - node
         - zsh
@@ -14,9 +16,25 @@
         - docker
         - dotfiles
         - productivity
+
+    - name: Update pacman and upgrade
+      become: true
+      apt:
+        update_cache: true
+        upgrade: yes
+      when: ansible_facts["os_family"] == "Archlinux"
+      tags:
+        - node
+        - zsh
+        - ssh
+        - docker
+        - dotfiles
+        - productivity
+
   vars:
     source_key: "./.ssh/id_rsa"
     dest_key: "{{ lookup('env', 'HOME') }}/.ssh/id_rsa"
+
   tasks:
     - include_tasks:
         file: tasks/zsh.yml
@@ -42,24 +60,24 @@
       tags:
         - dotfiles
         - install
-    - include_tasks:
-        file: tasks/nvim-setup.yml
-      tags:
-        - install
-        - nvim
-        - neovim
-    - include_tasks:
-        file: tasks/alacritty-install.yml
-      tags:
-        - install
-        - alacritty
-    - include_tasks:
-        file: tasks/docker.yml
-      tags:
-        - docker
-        - install
-    - include_tasks:
-        file: tasks/font.yml
-      tags:
-        - font
-        - install
+    # - include_tasks:
+    #     file: tasks/nvim-setup.yml
+    #   tags:
+    #     - install
+    #     - nvim
+    #     - neovim
+    # - include_tasks:
+    #     file: tasks/alacritty-install.yml
+    #   tags:
+    #     - install
+    #     - alacritty
+    # - include_tasks:
+    #     file: tasks/docker.yml
+    #   tags:
+    #     - docker
+    #     - install
+    # - include_tasks:
+    #     file: tasks/font.yml
+    #   tags:
+    #     - font
+    #     - install

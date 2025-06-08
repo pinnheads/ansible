@@ -1,8 +1,19 @@
-- name: Install packages
+- name: Install packages on Debian
   become: true
   apt:
     name: [ "tmux", "pip", "fzf", "tldr", "cmake", "alacritty", "ripgrep"]
   ignore_errors: true
+  when: ansible_facts["os_family"] == "Debian"
+  tags:
+    - install
+    - productivity
+
+- name: Install packages on Arch
+  become: true
+  pacman:
+    name: [ "tmux", "python-pip", "fzf", "tldr", "cmake", "alacritty", "ripgrep", "wofi"]
+  ignore_errors: true
+  when: ansible_facts["os_family"] == "Archlinux"
   tags:
     - install
     - productivity

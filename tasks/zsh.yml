@@ -1,7 +1,15 @@
-- name: Install zsh
+- name: Install zsh on debian
   become: true
   apt:
     name: [ "zsh", "curl" ]
+  when: ansible_facts["os_family"] == "Debian"
+  tags:
+    - zsh
+- name: Install zsh on arch
+  become: true
+  pacman:
+    name: [ "zsh", "curl" ]
+  when: ansible_facts["os_family"] == "Archlinux"
   tags:
     - zsh
 - name: Set zsh as default shell

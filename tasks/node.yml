@@ -1,9 +1,19 @@
-- name: Install nodejs and npm
+- name: Install nodejs and npm on Debian
   become: true
   apt:
     name:
       - nodejs
       - npm
+  when: ansible_facts["os_family"] == "Debian"
+  tags:
+    - node
+- name: Install nodejs and npm on Arch
+  become: true
+  pacman:
+    name:
+      - nodejs
+      - npm
+  when: ansible_facts["os_family"] == "Archlinux"
   tags:
     - node
 - name: Install n
