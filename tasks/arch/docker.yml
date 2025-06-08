@@ -1,0 +1,31 @@
+- name: Install Docker on Arch
+  become: true
+  pacman:
+    name:
+      - docker
+    state: present
+  tags: [docker, install]
+
+- name: Enable and start Docker service
+  become: true
+  systemd:
+    name: docker
+    enabled: true
+    state: started
+  tags: [docker, install]
+
+- name: Ensure docker group exists
+  become: true
+  group:
+    name: docker
+    state: present
+  tags: [docker, install]
+
+- name: Add current user to docker group
+  become: true
+  user:
+    name: "{{ ansible_user_id }}"
+    groups: docker
+    append: yes
+  tags: [docker, install]
+

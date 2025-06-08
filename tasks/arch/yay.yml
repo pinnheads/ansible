@@ -1,0 +1,33 @@
+- name: Ensure base-devel and git are installed
+  become: true
+  pacman:
+    name:
+      - base-devel
+      - git
+    state: present
+    update_cache: yes
+  tags: [install, yay]
+
+- name: Clone yay AUR repository
+  become: true
+  git:
+    repo: https://aur.archlinux.org/yay.git
+    dest: /opt/yay
+    update: yes
+  tags: [install, yay]
+
+- name: Build and install yay using makepkg
+  become: true
+  shell: |
+    cd /opt/yay
+    makepkg -si --noconfirm
+  args:
+    creates: /usr/bin/yay
+  tags: [install, yay]
+
+- name: Ensure yay is executable
+  become: true
+  file:
+    path: /usr/bin/yay
+    mode: '0755'
+  tags: [install, yay]
