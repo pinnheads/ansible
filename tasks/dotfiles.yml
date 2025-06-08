@@ -10,7 +10,7 @@
     - stow
 - name: Installing Stow on arch
   become: true
-  apt:
+  pacman:
     name: stow
     state: present
   when: ansible_facts["os_family"] == "Archlinux"
