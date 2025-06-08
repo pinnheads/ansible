@@ -77,6 +77,7 @@
 - name: Update desktop database
   become: true
   command: update-desktop-database
+  ignore_errors: true
   tags:
     - install
     - alacritty
