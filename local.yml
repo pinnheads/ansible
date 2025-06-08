@@ -61,20 +61,20 @@
         - dotfiles
         - install
     - include_tasks:
-        file: tasks/nvim-setup.yml
+        file: tasks/debian/nvim-setup.yml
       when: ansible_facts["os_family"] == "Debian"
       tags:
         - install
         - nvim
         - neovim
     - include_tasks:
-        file: tasks/alacritty-install.yml
+        file: tasks/debian/alacritty-install.yml
       when: ansible_facts["os_family"] == "Debian"
       tags:
         - install
         - alacritty
     - include_tasks:
-        file: tasks/docker.yml
+        file: tasks/debian/docker.yml
       when: ansible_facts["os_family"] == "Debian"
       tags:
         - docker
