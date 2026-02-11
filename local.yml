@@ -2,21 +2,6 @@
   gather_facts: yes
 
   pre_tasks:
-    - name: Update apt
-      become: true
-      apt:
-        force_apt_get: yes
-        update_cache: yes
-        state: present
-      when: ansible_facts["os_family"] == "Debian"
-      tags:
-        - node
-        - zsh
-        - ssh
-        - docker
-        - dotfiles
-        - productivity
-
     - name: Update pacman and upgrade
       become: true
       pacman:
