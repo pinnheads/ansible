@@ -1,7 +1,7 @@
 - name: Install zsh
   become: true
   apt:
-    name: [ "zsh", "curl" ]
+    name: ["zsh", "curl"]
   tags:
     - zsh
 - name: Set zsh as default shell
@@ -45,5 +45,9 @@
     path: "{{ansible_env.HOME}}/.bashrc"
     state: absent
   when: bashrc_file.stat.exists
+  tags:
+    - zsh
+- name: Create the home directory
+  shell: mkdir -p $HOME/personal/work
   tags:
     - zsh
