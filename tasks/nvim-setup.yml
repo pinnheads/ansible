@@ -26,8 +26,9 @@
     - dev
 
 - name: Refresh font cache
-  shell: fc-cache -v
-  ignore_errors: true
+  ansible.builtin.command: fc-cache -v
+  changed_when: false
+  failed_when: false
   tags:
     - neovim
     - dev

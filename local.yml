@@ -4,7 +4,7 @@
       become: true
       pacman:
         update_cache: true
-        upgrade: yes
+      when: ansible_facts["os_family"] == "Archlinux"
       tags:
         - ssh
         - neovim
@@ -23,4 +23,4 @@
       tags:
         - neovim
         - dev
-   
+  
