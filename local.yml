@@ -1,65 +1,26 @@
 - hosts: localhost
-  # become: true
   pre_tasks:
-    - name: Update apt
+    - name: Update packages
       become: true
-      apt:
-        force_apt_get: yes
-        update_cache: yes
-        state: present
+      pacman:
+        update_cache: true
+        upgrade: yes
       tags:
-        - node
-        - zsh
         - ssh
-        - docker
-        - dotfiles
-        - productivity
+        - neovim
+        - dev
   vars:
     source_key: "./.ssh/id_rsa"
     dest_key: "{{ lookup('env', 'HOME') }}/.ssh/id_rsa"
   tasks:
     - include_tasks:
-        file: tasks/zsh.yml
-      tags:
-        - zsh
-    - include_tasks:
-        file: tasks/node.yml
-      tags:
-        - node
-    - include_tasks:
-        file: tasks/productivity-tools.yml
-      tags:
-        - productivity
-        - install
-    - include_tasks:
         file: tasks/ssh.yml
       tags:
         - ssh
-        - dotfiles
-        - install
-    - include_tasks:
-        file: tasks/dotfiles.yml
-      tags:
-        - dotfiles
-        - install
+        - dev
     - include_tasks:
         file: tasks/nvim-setup.yml
       tags:
-        - install
-        - nvim
         - neovim
-    - include_tasks:
-        file: tasks/alacritty-install.yml
-      tags:
-        - install
-        - alacritty
-    - include_tasks:
-        file: tasks/docker.yml
-      tags:
-        - docker
-        - install
-    - include_tasks:
-        file: tasks/font.yml
-      tags:
-        - font
-        - install
+        - dev
+   

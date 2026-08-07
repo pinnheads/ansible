@@ -7,7 +7,7 @@
       "unzip",
       "gcc",
       "ripgrep",
-      "fd-find",
+      "fd",
       "tree-sitter-cli",
       "lazygit",
       "nodejs",
