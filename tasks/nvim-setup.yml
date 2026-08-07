@@ -18,8 +18,16 @@
       "openssh",
       "neovim",
       "tmux",
+      "ttf-jetbrains-mono"
     ]
   when: ansible_facts["os_family"] == "Archlinux"
+  tags:
+    - neovim
+    - dev
+
+- name: Refresh font cache
+  shell: fc-cache -v
+  ignore_errors: true
   tags:
     - neovim
     - dev
@@ -32,3 +40,6 @@
     update: yes
     accept_hostkey: yes
     version: master
+  tags:
+    - neovim
+    - dev
