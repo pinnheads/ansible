@@ -22,7 +22,7 @@
     ]
   when: ansible_facts["os_family"] == "Archlinux"
   tags:
-    - neovim
+    - dev-tools
     - dev
 
 - name: Refresh font cache
@@ -30,17 +30,5 @@
   changed_when: false
   failed_when: false
   tags:
-    - neovim
-    - dev
-
-- name: Copy the config for neovim
-  ansible.builtin.git:
-    repo: git@github.com:pinnheads/neovim.git
-    dest: "{{ lookup('env', 'HOME') }}/.config/nvim"
-    recursive: yes
-    update: yes
-    accept_hostkey: yes
-    version: master
-  tags:
-    - neovim
+    - dev-tools 
     - dev

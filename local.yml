@@ -7,7 +7,7 @@
       when: ansible_facts["os_family"] == "Archlinux"
       tags:
         - ssh
-        - neovim
+        - dotfiles
         - dev
   vars:
     source_key: "./.ssh/id_rsa"
@@ -19,8 +19,13 @@
         - ssh
         - dev
     - include_tasks:
-        file: tasks/nvim-setup.yml
+        file: tasks/dev-tools.yml
       tags:
         - neovim
+        - dev
+    - include_tasks:
+        file: tasks/dev-dotfiles.yml
+      tags:
+        - dotfiles
         - dev
   
