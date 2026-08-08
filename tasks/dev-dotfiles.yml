@@ -1,13 +1,3 @@
-- name: Installing Stow
-  become: true
-  pacman:
-    name: [
-      "stow"
-    ]
-  tags:
-    - dotfiles
-    - dev
-
 - name: Cloning dev dotfiles
   ansible.builtin.git:
     repo: git@github.com:pinnheads/.dev.git
