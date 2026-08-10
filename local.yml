@@ -28,4 +28,9 @@
       tags:
         - dotfiles
         - dev
+    - include_tasks:
+        file: tasks/zsh.yml
+      tags:
+        - zsh
+        - dev
   

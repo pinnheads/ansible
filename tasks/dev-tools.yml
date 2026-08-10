@@ -19,7 +19,9 @@
       "neovim",
       "tmux",
       "ttf-jetbrains-mono",
-      "stow"
+      "stow",
+      "zsh",
+      "curl"
     ]
   when: ansible_facts["os_family"] == "Archlinux"
   tags:
