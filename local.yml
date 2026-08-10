@@ -21,11 +21,6 @@
     - include_tasks:
         file: tasks/dev-tools.yml
       tags:
-        - neovim
-        - dev
-    - include_tasks:
-        file: tasks/dev-dotfiles.yml
-      tags:
         - dotfiles
         - dev
     - include_tasks:
@@ -33,3 +28,9 @@
       tags:
         - zsh
         - dev
+    - include_tasks:
+        file: tasks/dev-dotfiles.yml
+      tags:
+        - dotfiles
+        - dev
+

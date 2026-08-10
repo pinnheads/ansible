@@ -21,22 +21,22 @@
     - zsh
 - name: Check if ~/.zshrc file is present
   ansible.builtin.stat:
-    path: "{{ansible_env.HOME}}/.zshrc"
+    path: "{{ ansible_facts['env']['HOME'] }}/.zshrc"
   register: zshrc_file
 - name: Remove the original .zshrc file
   file:
-    path: "{{ansible_env.HOME}}/.zshrc"
+    path: "{{ ansible_facts['env']['HOME'] }}/.zshrc"
     state: absent
   when: zshrc_file.stat.exists
   tags:
     - zsh
 - name: Check if ~/.bashrc file is present
   ansible.builtin.stat:
-    path: "{{ansible_env.HOME}}/.bashrc"
+    path: "{{ ansible_facts['env']['HOME'] }}/.bashrc"
   register: bashrc_file
 - name: Remove the original .bashrc file
   file:
-    path: "{{ansible_env.HOME}}/.bashrc"
+    path: "{{ ansible_facts['env']['HOME'] }}/.bashrc"
     state: absent
   when: bashrc_file.stat.exists
   tags:
