@@ -8,6 +8,8 @@
       tags:
         - ssh
         - dotfiles
+        - zsh
+        - dev-tools
         - dev
   vars:
     source_key: "./.ssh/id_rsa"
