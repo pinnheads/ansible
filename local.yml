@@ -7,23 +7,24 @@
       when: ansible_facts["os_family"] == "Archlinux"
       tags:
         - ssh
-        - dotfiles
+        - dev-dotfiles
         - zsh
-        - dev-tools
         - dev
   vars:
     source_key: "./.ssh/id_rsa"
     dest_key: "{{ lookup('env', 'HOME') }}/.ssh/id_rsa"
   tasks:
     - include_tasks:
+        file: tasks/dev-tools.yml
+      tags:
+        - dev-dotfiles
+        - ssh
+        - zsh
+        - dev
+    - include_tasks:
         file: tasks/ssh.yml
       tags:
         - ssh
-        - dev
-    - include_tasks:
-        file: tasks/dev-tools.yml
-      tags:
-        - dotfiles
         - dev
     - include_tasks:
         file: tasks/zsh.yml
@@ -33,6 +34,6 @@
     - include_tasks:
         file: tasks/dev-dotfiles.yml
       tags:
-        - dotfiles
+        - dev-dotfiles
         - dev
 

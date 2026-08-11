@@ -7,11 +7,11 @@
     accept_hostkey: yes
     version: main
   tags:
-    - dotfiles
+    - dev-dotfiles
     - dev
 
 - name: Stow dotfiles
   shell: cd $HOME/.dev && ./stow
   tags:
-    - dotfiles
+    - dev-dotfiles
     - dev
