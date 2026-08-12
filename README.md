@@ -20,7 +20,7 @@
 <a href="https://github.com/pinnheads/repo-template/pulse">
 <img alt="Last Updated" src="https://img.shields.io/github/last-commit/pinnheads/repo-template?style=flat&color=e06c75&label="> </a>
 
-<h3>Short Sweet Headline 🎇🎉</h3>
+<h3>Personal Dev and Desktop Setup Ansible</h3>
 
 <figure>
   <img src="images/screenshot.png" alt="repo-template in action">
