@@ -1,3 +1,12 @@
+- name: Remove non-git .dev folder if present
+  ansible.builtin.file:
+    path: "{{ lookup('env', 'HOME') }}/.dev"
+    state: absent
+  when: not (lookup('env', 'HOME') + '/.dev/.git') is exists
+  tags:
+    - dev-dotfiles
+    - dev
+
 - name: Cloning dev dotfiles
   ansible.builtin.git:
     repo: git@github.com:pinnheads/.dev.git
