@@ -24,9 +24,7 @@
     path: "{{ ansible_facts['env']['HOME'] }}/.zshrc"
   register: zshrc_file
 - name: Remove the original .zshrc file
-  file:
-    path: "{{ ansible_facts['env']['HOME'] }}/.zshrc"
-    state: absent
+  shell: "mv ~/.zshrc ~/.zshrc.bak"
   when: zshrc_file.stat.exists
   tags:
     - zsh
@@ -35,9 +33,7 @@
     path: "{{ ansible_facts['env']['HOME'] }}/.bashrc"
   register: bashrc_file
 - name: Remove the original .bashrc file
-  file:
-    path: "{{ ansible_facts['env']['HOME'] }}/.bashrc"
-    state: absent
+  shell: "mv ~/.bashrc ~/.bashrc.bak"
   when: bashrc_file.stat.exists
   tags:
     - zsh

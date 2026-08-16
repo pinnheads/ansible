@@ -1,18 +1,28 @@
-# Builds a docker image for a ubuntu system
-# Run docker build - < Dockerfile 
-# docker build --tag <image name> .
-# docker run --rm -it <image name> bash
+# Builds a Docker image for an Arch Linux system
+# Run: docker build --tag arch-image .
 
-FROM ubuntu:noble AS base
+FROM archlinux:latest AS base
 WORKDIR /usr/local/bin
-ENV DEBIAN_FRONTEND=noninteractive
-RUN apt-get update && \
-    apt-get upgrade -y && \
-    apt-get install -y software-properties-common curl git build-essential && \
-    apt-add-repository -y ppa:ansible/ansible && \
-    apt-get update && \
-    apt-get install -y curl git ansible build-essential && \
-    apt-get clean autoclean && \
-    apt-get autoremove --yes && \
-    apt-get install nano && \
-    apt-get install git && git config --global user.email "utsavdeep01@gmail.com" && git config --global user.name "Utsav"
+
+# Suppress pacman prompts and speed up build
+ENV TERM xterm
+ENV LANG en_US.UTF-8
+
+RUN echo "en_US.UTF-8 UTF-8" > /etc/locale.gen && \
+    locale-gen && \
+    echo "LANG=en_US.UTF-8" > /etc/locale.conf && \
+    pacman -Syu --noconfirm && \
+    pacman -S --noconfirm --needed base-devel git curl nano ansible sudo gcc make ripgrep fd tree-sitter-cli unzip neovim openssh && \
+    useradd -m -G wheel -s /bin/bash utsav && \
+    echo "utsav ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers && \
+    git config --global user.email "utsavdeep01@gmail.com" && \
+    git config --global user.name "Utsav" && \
+    yes | pacman -Scc
+
+USER utsav
+WORKDIR /home/utsav/ansible
+
+# Optional: Set a default shell (bash) and locale
+SHELL ["/bin/bash", "-c"]
+
+CMD ["bash"]
