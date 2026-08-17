@@ -1,0 +1,43 @@
+- name: Create personal directory
+  ansible.builtin.file:
+    path: "{{ lookup('env', 'HOME') }}/personal"
+    state: directory
+  tags:
+    - projects
+    - dev
+
+- name: Cloning dev dotfiles project
+  ansible.builtin.git:
+    repo: git@github.com:pinnheads/.dev.git
+    dest: "{{ lookup('env', 'HOME') }}/personal/.dev"
+    recursive: yes
+    update: yes
+    accept_hostkey: yes
+    version: main
+  tags:
+    - projects
+    - dev
+
+- name: Cloning ansible project
+  ansible.builtin.git:
+    repo: git@github.com:pinnheads/ansible.git
+    dest: "{{ lookup('env', 'HOME') }}/personal/ansible"
+    recursive: yes
+    update: yes
+    accept_hostkey: yes
+    version: main
+  tags:
+    - projects
+    - dev
+
+- name: Cloning personal website project
+  ansible.builtin.git:
+    repo: git@github.com:pinnheads/personal-website.git
+    dest: "{{ lookup('env', 'HOME') }}/personal/personal-website"
+    recursive: yes
+    update: yes
+    accept_hostkey: yes
+    version: main
+  tags:
+    - projects
+    - dev
