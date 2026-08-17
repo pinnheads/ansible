@@ -5,8 +5,8 @@ FROM archlinux:latest AS base
 WORKDIR /usr/local/bin
 
 # Suppress pacman prompts and speed up build
-ENV TERM xterm
-ENV LANG en_US.UTF-8
+ENV TERM=xterm
+ENV LANG=en_US.UTF-8
 
 RUN echo "en_US.UTF-8 UTF-8" > /etc/locale.gen && \
     locale-gen && \
