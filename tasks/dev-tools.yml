@@ -1,28 +1,30 @@
 - name: Install required packages
   become: true
   pacman:
-    name: [
-      "git",
-      "make",
-      "unzip",
-      "gcc",
-      "ripgrep",
-      "fd",
-      "tree-sitter-cli",
-      "lazygit",
-      "nodejs",
-      "lua",
-      "luarocks",
-      "npm",
-      "python-pip",
-      "openssh",
-      "neovim",
-      "tmux",
-      "ttf-jetbrains-mono",
-      "stow",
-      "zsh",
-      "curl"
-    ]
+    name:
+      [
+        "git",
+        "make",
+        "unzip",
+        "gcc",
+        "ripgrep",
+        "fd",
+        "fzf",
+        "tree-sitter-cli",
+        "lazygit",
+        "nodejs",
+        "lua",
+        "luarocks",
+        "npm",
+        "python-pip",
+        "openssh",
+        "neovim",
+        "tmux",
+        "ttf-jetbrains-mono",
+        "stow",
+        "zsh",
+        "curl",
+      ]
   when: ansible_facts["os_family"] == "Archlinux"
   tags:
     - dev-tools
