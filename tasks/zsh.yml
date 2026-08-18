@@ -3,43 +3,56 @@
   shell: chsh -s `which zsh`
   tags:
     - zsh
+    - dev
 - name: Remove oh-my-zsh folder if it is present
   file:
     path: ~/.oh-my-zsh
     state: absent
   tags:
     - zsh
+    - dev
 - name: Install oh-my-zsh
   shell: sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
   tags:
     - zsh
+    - dev
 - name: Install zsh-autosuggestions
   ansible.builtin.git:
     repo: https://github.com/zsh-users/zsh-autosuggestions.git
     dest: ~/.oh-my-zsh/custom/plugins/zsh-autosuggestions
   tags:
     - zsh
+    - dev
 - name: Install zsh-syntax-highlighting
   ansible.builtin.git:
     repo: https://github.com/zsh-users/zsh-syntax-highlighting.git
     dest: ~/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting
   tags:
     - zsh
+    - dev
 - name: Check if ~/.zshrc file is present
   ansible.builtin.stat:
     path: "{{ ansible_facts['env']['HOME'] }}/.zshrc"
   register: zshrc_file
+  tags:
+    - zsh
+    - dev
 - name: Remove the original .zshrc file
   shell: "mv ~/.zshrc ~/.zshrc.bak"
   when: zshrc_file.stat.exists
   tags:
     - zsh
+    - dev
 - name: Check if ~/.bashrc file is present
   ansible.builtin.stat:
     path: "{{ ansible_facts['env']['HOME'] }}/.bashrc"
   register: bashrc_file
+  tags:
+    - zsh
+    - dev
 - name: Remove the original .bashrc file
   shell: "mv ~/.bashrc ~/.bashrc.bak"
   when: bashrc_file.stat.exists
   tags:
     - zsh
+    - dev
