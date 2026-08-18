@@ -1,18 +1,27 @@
 - name: Set zsh as default shell
   become: true
-  shell: chsh -s `which zsh`
+  ansible.builtin.user:
+    name: "{{ ansible_user_id }}"
+    shell: /usr/bin/zsh
   tags:
     - zsh
     - dev
-- name: Remove oh-my-zsh folder if it is present
-  file:
-    path: ~/.oh-my-zsh
-    state: absent
+- name: Check if oh-my-zsh is installed
+  ansible.builtin.stat:
+    path: "{{ ansible_facts['env']['HOME'] }}/.oh-my-zsh"
+  register: omz_dir
   tags:
     - zsh
     - dev
+# --keep-zshrc stops the installer touching .zshrc at all; without it a re-run
+# moved the stowed .zshrc symlink to .zshrc.pre-oh-my-zsh, overwriting the copy
+# of the real .zshrc saved on the first run. --unattended stops it running its
+# own chsh and exec'ing zsh at the end.
 - name: Install oh-my-zsh
-  shell: sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+  ansible.builtin.shell: >
+    sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+    -- --unattended --keep-zshrc
+  when: not omz_dir.stat.exists
   tags:
     - zsh
     - dev
@@ -37,9 +46,11 @@
   tags:
     - zsh
     - dev
+# islnk guard: back up a real pre-existing .zshrc, but leave the stow symlink
+# alone on later runs.
 - name: Remove the original .zshrc file
   shell: "mv ~/.zshrc ~/.zshrc.bak"
-  when: zshrc_file.stat.exists
+  when: zshrc_file.stat.exists and not zshrc_file.stat.islnk
   tags:
     - zsh
     - dev
@@ -52,7 +63,7 @@
     - dev
 - name: Remove the original .bashrc file
   shell: "mv ~/.bashrc ~/.bashrc.bak"
-  when: bashrc_file.stat.exists
+  when: bashrc_file.stat.exists and not bashrc_file.stat.islnk
   tags:
     - zsh
     - dev

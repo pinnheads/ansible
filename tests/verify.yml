@@ -70,3 +70,16 @@
       ansible.builtin.assert:
         that: stowed.results | map(attribute='content') | map('b64decode') | select('search', 'managed by .dev') | list | length == 2
         fail_msg: stowed dotfiles do not contain the .dev fixture content
+
+    - name: Read the invoking user's login shell
+      ansible.builtin.shell: 'getent passwd "$(id -un)" | cut -d: -f7'
+      register: login_shell
+      changed_when: false
+
+    # Guards the case where chsh runs under become and silently retargets root.
+    - name: The login shell changed for this user, not root
+      ansible.builtin.assert:
+        that: login_shell.stdout.endswith('/zsh')
+        fail_msg: >-
+          login shell is '{{ login_shell.stdout }}', expected zsh — the shell
+          change probably targeted root instead of this user

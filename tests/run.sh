@@ -25,13 +25,11 @@ scenario_1_fresh() {
     '
 }
 
-# 2 — re-running must not report changes. Scoped to --tags projects, which
-# selects dev-tools + ssh + projects; see the plan for why the other tags are
-# not idempotent today.
+# 2 — re-running must not report changes, across the whole playbook.
 scenario_2_idempotent() {
     in_container '
-        play --tags projects >/dev/null
-        play --tags projects | tee /tmp/second
+        play --tags dev >/dev/null
+        play --tags dev | tee /tmp/second
         changed=$(sed -n "s/.*localhost.*changed=\([0-9]*\).*/\1/p" /tmp/second)
         [ "$changed" = 0 ] || { echo "second run reported changed=$changed"; exit 1; }
     '
@@ -59,13 +57,19 @@ scenario_4_dev_stale() {
     '
 }
 
-# 5 — a real ~/.zshrc is already in place where stow wants to symlink
+# 5 — a real ~/.zshrc is already in place where stow wants to symlink. Runs
+# twice: the backup used to survive run 1 and get clobbered by run 2, when the
+# oh-my-zsh installer moved the stowed symlink over it.
 scenario_5_dotfiles_present() {
     in_container '
         echo "# my own zshrc" > ~/.zshrc
         play --tags dev
-        test -e ~/.zshrc.bak || { echo "existing .zshrc was not backed up"; exit 1; }
+        play --tags dev
         test -L ~/.zshrc || { echo ".zshrc is not a stow symlink"; exit 1; }
+        grep -q "my own zshrc" ~/.zshrc.bak || {
+            echo "the original .zshrc was lost; .zshrc.bak holds: $(head -1 ~/.zshrc.bak 2>&1)"; exit 1; }
+        test ! -e ~/.zshrc.pre-oh-my-zsh || {
+            echo "oh-my-zsh installer touched .zshrc despite --keep-zshrc"; exit 1; }
         ansible-playbook tests/verify.yml
     '
 }
