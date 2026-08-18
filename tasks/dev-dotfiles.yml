@@ -1,0 +1,41 @@
+- name: Remove non-git .dev folder if present
+  ansible.builtin.file:
+    path: "{{ lookup('env', 'HOME') }}/.dev"
+    state: absent
+  when: not (lookup('env', 'HOME') + '/.dev/.git') is exists
+  tags:
+    - dev-dotfiles
+    - dev
+
+- name: Cloning dev dotfiles
+  ansible.builtin.git:
+    repo: git@github.com:pinnheads/.dev.git
+    dest: "{{ lookup('env', 'HOME') }}/.dev"
+    recursive: yes
+    update: yes
+    accept_hostkey: yes
+    version: main
+    force: yes
+  tags:
+    - dev-dotfiles
+    - dev
+
+# stow is silent whether or not it links anything, so changed is decided by
+# comparing the set of symlinks pointing into .dev before and after. A creates:
+# sentinel would be wrong here: re-running ./stow is how a newly added package
+# in .dev gets linked.
+# ponytail: maxdepth 3 covers the current layout; raise it if .dev ever stows
+# something deeper.
+- name: Stow dotfiles
+  shell: |
+    before=$(find "$HOME" -maxdepth 3 -lname '*.dev/*' | sort)
+    ./stow
+    after=$(find "$HOME" -maxdepth 3 -lname '*.dev/*' | sort)
+    [ "$before" = "$after" ] || echo STOW_CHANGED
+  args:
+    chdir: "{{ lookup('env', 'HOME') }}/.dev"
+  register: stow_result
+  changed_when: "'STOW_CHANGED' in stow_result.stdout"
+  tags:
+    - dev-dotfiles
+    - dev

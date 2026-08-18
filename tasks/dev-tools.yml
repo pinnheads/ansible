@@ -1,0 +1,40 @@
+- name: Install required packages
+  become: true
+  pacman:
+    name:
+      [
+        "git",
+        "make",
+        "unzip",
+        "gcc",
+        "ripgrep",
+        "fd",
+        "fzf",
+        "tree-sitter-cli",
+        "lazygit",
+        "nodejs",
+        "lua",
+        "luarocks",
+        "npm",
+        "python-pip",
+        "openssh",
+        "neovim",
+        "tmux",
+        "ttf-jetbrains-mono",
+        "stow",
+        "zsh",
+        "curl",
+      ]
+  when: ansible_facts["os_family"] == "Archlinux"
+  tags:
+    - dev-tools
+    - projects
+    - dev
+
+- name: Refresh font cache
+  ansible.builtin.command: fc-cache -v
+  changed_when: false
+  failed_when: false
+  tags:
+    - dev-tools
+    - dev
