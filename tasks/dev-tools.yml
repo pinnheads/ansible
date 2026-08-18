@@ -28,6 +28,7 @@
   when: ansible_facts["os_family"] == "Archlinux"
   tags:
     - dev-tools
+    - projects
     - dev
 
 - name: Refresh font cache
