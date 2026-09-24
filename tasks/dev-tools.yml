@@ -29,10 +29,72 @@
     - projects
     - dev
 
+# Mirrors the pacman list above. Left out because macOS already provides them
+# (via the Xcode Command Line Tools that Homebrew itself requires): make, gcc,
+# unzip, openssh, curl, zsh. nodejs+npm are both in `node`, python-pip is in
+# `python`.
+- name: Check Homebrew is installed
+  ansible.builtin.command: brew --version
+  register: brew_check
+  changed_when: false
+  failed_when: false
+  check_mode: false
+  when: ansible_facts["os_family"] == "Darwin"
+  tags:
+    - dev-tools
+    - projects
+    - dev
+
+- name: Fail if Homebrew is missing
+  ansible.builtin.fail:
+    msg: >-
+      Homebrew is required on macOS. Install it from https://brew.sh and
+      re-run the playbook.
+  when: ansible_facts["os_family"] == "Darwin" and brew_check.rc != 0
+  tags:
+    - dev-tools
+    - projects
+    - dev
+
+- name: Install required packages (macOS)
+  community.general.homebrew:
+    name:
+      - git
+      - ripgrep
+      - fd
+      - fzf
+      - tree-sitter-cli
+      - lazygit
+      - node
+      - lua
+      - luarocks
+      - python
+      - neovim
+      - tmux
+      - stow
+    state: present
+  when: ansible_facts["os_family"] == "Darwin"
+  tags:
+    - dev-tools
+    - projects
+    - dev
+
+- name: Install fonts (macOS)
+  community.general.homebrew_cask:
+    name: font-jetbrains-mono
+    state: present
+  when: ansible_facts["os_family"] == "Darwin"
+  tags:
+    - dev-tools
+    - projects
+    - dev
+
+# macOS has no fontconfig; the font cask registers the font itself.
 - name: Refresh font cache
   ansible.builtin.command: fc-cache -v
   changed_when: false
   failed_when: false
+  when: ansible_facts["os_family"] != "Darwin"
   tags:
     - dev-tools
     - dev
