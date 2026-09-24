@@ -1,0 +1,85 @@
+# End-state assertions for a full provision run (local.yml --tags dev).
+# Scenario-specific checks live inline in tests/run.sh instead.
+- hosts: localhost
+  gather_facts: false
+  vars:
+    home: "{{ lookup('env', 'HOME') }}"
+  tasks:
+    - name: Stat the ssh files
+      ansible.builtin.stat:
+        path: "{{ home }}/.ssh/{{ item }}"
+      register: ssh_files
+      loop: ["", "id_rsa", "id_rsa.pub"]
+
+    - name: The .ssh directory and keys have the right modes
+      ansible.builtin.assert:
+        that:
+          - ssh_files.results[0].stat.isdir
+          - ssh_files.results[0].stat.mode == '0700'
+          - ssh_files.results[1].stat.isreg
+          - ssh_files.results[1].stat.mode == '0600'
+          - ssh_files.results[2].stat.isreg
+          - ssh_files.results[2].stat.mode == '0644'
+        fail_msg: >-
+          ssh modes wrong:
+          dir={{ ssh_files.results[0].stat.mode | default('missing') }}
+          key={{ ssh_files.results[1].stat.mode | default('missing') }}
+          pub={{ ssh_files.results[2].stat.mode | default('missing') }}
+
+    - name: Stat every cloned repo
+      ansible.builtin.stat:
+        path: "{{ home }}/{{ item }}/.git"
+      register: repos
+      loop:
+        - .dev
+        - personal/.dev
+        - personal/ansible
+        - personal/personal-website
+
+    - name: Every repo was cloned
+      ansible.builtin.assert:
+        that: repos.results | rejectattr('stat.exists') | list | length == 0
+        fail_msg: >-
+          not cloned:
+          {{ repos.results | rejectattr('stat.exists') | map(attribute='item') | list }}
+
+    - name: Stat the stowed .zshrc
+      ansible.builtin.stat:
+        path: "{{ home }}/.zshrc"
+      register: zshrc
+
+    - name: .zshrc is a symlink into .dev
+      ansible.builtin.assert:
+        that:
+          - zshrc.stat.islnk
+          - zshrc.stat.lnk_source.startswith(home + '/.dev/')
+        fail_msg: >-
+          .zshrc is not a stow symlink into .dev
+          (islnk={{ zshrc.stat.islnk | default('missing') }},
+          target={{ zshrc.stat.lnk_source | default('n/a') }})
+
+    - name: Read the stowed dotfiles
+      ansible.builtin.slurp:
+        path: "{{ home }}/{{ item }}"
+      register: stowed
+      loop:
+        - .zshrc
+        - .config/nvim/init.lua
+
+    - name: Stowed dotfiles resolve to the .dev copies
+      ansible.builtin.assert:
+        that: stowed.results | map(attribute='content') | map('b64decode') | select('search', 'managed by .dev') | list | length == 2
+        fail_msg: stowed dotfiles do not contain the .dev fixture content
+
+    - name: Read the invoking user's login shell
+      ansible.builtin.shell: 'getent passwd "$(id -un)" | cut -d: -f7'
+      register: login_shell
+      changed_when: false
+
+    # Guards the case where chsh runs under become and silently retargets root.
+    - name: The login shell changed for this user, not root
+      ansible.builtin.assert:
+        that: login_shell.stdout.endswith('/zsh')
+        fail_msg: >-
+          login shell is '{{ login_shell.stdout }}', expected zsh — the shell
+          change probably targeted root instead of this user

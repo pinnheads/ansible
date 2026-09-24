@@ -1,53 +1,69 @@
-- name: Install zsh
-  become: true
-  apt:
-    name: ["zsh", "curl"]
-  tags:
-    - zsh
 - name: Set zsh as default shell
   become: true
-  shell: chsh -s `which zsh`
+  ansible.builtin.user:
+    name: "{{ ansible_facts['user_id'] }}"
+    shell: /usr/bin/zsh
   tags:
     - zsh
-- name: Remove oh-my-zsh folder if it is present
-  file:
-    path: ~/.oh-my-zsh
-    state: absent
+    - dev
+- name: Check if oh-my-zsh is installed
+  ansible.builtin.stat:
+    path: "{{ ansible_facts['env']['HOME'] }}/.oh-my-zsh"
+  register: omz_dir
   tags:
     - zsh
+    - dev
+# --keep-zshrc stops the installer touching .zshrc at all; without it a re-run
+# moved the stowed .zshrc symlink to .zshrc.pre-oh-my-zsh, overwriting the copy
+# of the real .zshrc saved on the first run. --unattended stops it running its
+# own chsh and exec'ing zsh at the end.
 - name: Install oh-my-zsh
-  shell: sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+  ansible.builtin.shell: >
+    sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+    -- --unattended --keep-zshrc
+  when: not omz_dir.stat.exists
   tags:
     - zsh
+    - dev
 - name: Install zsh-autosuggestions
   ansible.builtin.git:
     repo: https://github.com/zsh-users/zsh-autosuggestions.git
     dest: ~/.oh-my-zsh/custom/plugins/zsh-autosuggestions
   tags:
     - zsh
+    - dev
+- name: Install zsh-syntax-highlighting
+  ansible.builtin.git:
+    repo: https://github.com/zsh-users/zsh-syntax-highlighting.git
+    dest: ~/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting
+  tags:
+    - zsh
+    - dev
 - name: Check if ~/.zshrc file is present
   ansible.builtin.stat:
-    path: "{{ansible_env.HOME}}/.zshrc"
+    path: "{{ ansible_facts['env']['HOME'] }}/.zshrc"
   register: zshrc_file
-- name: Remove the original .zshrc file
-  file:
-    path: "{{ansible_env.HOME}}/.zshrc"
-    state: absent
-  when: zshrc_file.stat.exists
   tags:
     - zsh
+    - dev
+# islnk guard: back up a real pre-existing .zshrc, but leave the stow symlink
+# alone on later runs.
+- name: Remove the original .zshrc file
+  shell: "mv ~/.zshrc ~/.zshrc.bak"
+  when: zshrc_file.stat.exists and not zshrc_file.stat.islnk
+  tags:
+    - zsh
+    - dev
 - name: Check if ~/.bashrc file is present
   ansible.builtin.stat:
-    path: "{{ansible_env.HOME}}/.bashrc"
+    path: "{{ ansible_facts['env']['HOME'] }}/.bashrc"
   register: bashrc_file
+  tags:
+    - zsh
+    - dev
 - name: Remove the original .bashrc file
-  file:
-    path: "{{ansible_env.HOME}}/.bashrc"
-    state: absent
-  when: bashrc_file.stat.exists
+  shell: "mv ~/.bashrc ~/.bashrc.bak"
+  when: bashrc_file.stat.exists and not bashrc_file.stat.islnk
   tags:
     - zsh
-- name: Create the home directory
-  shell: mkdir -p $HOME/personal/work
-  tags:
-    - zsh
+    - dev

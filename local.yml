@@ -1,65 +1,46 @@
 - hosts: localhost
-  # become: true
   pre_tasks:
-    - name: Update apt
+    - name: Update packages
       become: true
-      apt:
-        force_apt_get: yes
-        update_cache: yes
-        state: present
+      pacman:
+        update_cache: true
+      when: ansible_facts["os_family"] == "Archlinux"
       tags:
-        - node
-        - zsh
+        - pkg-update
         - ssh
-        - docker
-        - dotfiles
-        - productivity
+        - dev-dotfiles
+        - zsh
+        - dev
   vars:
     source_key: "./.ssh/id_rsa"
     dest_key: "{{ lookup('env', 'HOME') }}/.ssh/id_rsa"
   tasks:
     - include_tasks:
-        file: tasks/zsh.yml
+        file: tasks/dev-tools.yml
       tags:
+        - dev-dotfiles
+        - projects
+        - ssh
         - zsh
-    - include_tasks:
-        file: tasks/node.yml
-      tags:
-        - node
-    - include_tasks:
-        file: tasks/productivity-tools.yml
-      tags:
-        - productivity
-        - install
+        - dev
     - include_tasks:
         file: tasks/ssh.yml
       tags:
         - ssh
-        - dotfiles
-        - install
+        - projects
+        - dev
     - include_tasks:
-        file: tasks/dotfiles.yml
+        file: tasks/zsh.yml
       tags:
-        - dotfiles
-        - install
+        - zsh
+        - dev
     - include_tasks:
-        file: tasks/nvim-setup.yml
+        file: tasks/dev-dotfiles.yml
       tags:
-        - install
-        - nvim
-        - neovim
+        - dev-dotfiles
+        - dev
     - include_tasks:
-        file: tasks/alacritty-install.yml
+        file: tasks/projects.yml
       tags:
-        - install
-        - alacritty
-    - include_tasks:
-        file: tasks/docker.yml
-      tags:
-        - docker
-        - install
-    - include_tasks:
-        file: tasks/font.yml
-      tags:
-        - font
-        - install
+        - projects
+        - dev
