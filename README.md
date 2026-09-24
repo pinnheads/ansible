@@ -42,24 +42,35 @@ repo-template is a `<utility/tool>` that allows `<target_audience>` to `<action>
 
 ### ⚡ Requirements
 
--   foo >= bar
--   bazz
+-   Arch Linux: `sudo pacman -S ansible git`
+-   macOS: [Homebrew](https://brew.sh) (which also installs the Xcode Command
+    Line Tools), then `brew install ansible`
 
 ### 🚀 Installation
 
 ```bash
-git clone https://github.com/pinnheads/repo-template
-cd repo-template
-<install_command>
+git clone https://github.com/pinnheads/ansible
+cd ansible
 ```
 
 ### 💻 Usage
 
 ```bash
-USAGE:
-    repo-template [FLAGS] [OPTIONS]
-Example:
-    repo-template
+# everything; -K prompts for the sudo password, --ask-vault-pass for the ssh key
+ansible-playbook local.yml --tags dev -K --ask-vault-pass
+
+# a single part: dev-tools, ssh, zsh, dev-dotfiles, projects
+ansible-playbook local.yml --tags dev-tools -K
+```
+
+On macOS packages come from Homebrew and sudo is only needed if your login
+shell is not zsh yet (it is by default), so `-K` can usually be dropped.
+
+### 🧪 Tests
+
+```bash
+./tests/run.sh         # Arch, in docker
+./tests/run-macos.sh   # macOS, natively against a throwaway $HOME
 ```
 
 ## What's Next

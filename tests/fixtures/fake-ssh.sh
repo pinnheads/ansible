@@ -9,5 +9,6 @@
 # sets GIT_SSH_COMMAND itself when accept_hostkey is on, which wins over config.
 #
 # git invokes: ssh [opts] <host> "git-upload-pack 'pinnheads/repo.git'"
+# FAKE_REPOS overrides the repo dir; tests/run-macos.sh sets it.
 read -r prog path <<<"${*: -1}"
-exec "$prog" "/srv/repos/$(basename "${path//\'/}")"
+exec "$prog" "${FAKE_REPOS:-/srv/repos}/$(basename "${path//\'/}")"

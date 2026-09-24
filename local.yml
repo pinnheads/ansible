@@ -11,13 +11,27 @@
         - dev-dotfiles
         - zsh
         - dev
+    # Homebrew refuses to run as root, so no become here.
+    - name: Update Homebrew
+      community.general.homebrew:
+        update_homebrew: true
+      when: ansible_facts["os_family"] == "Darwin"
+      tags:
+        - pkg-update
+        - ssh
+        - dev-dotfiles
+        - zsh
+        - dev
   vars:
     source_key: "./.ssh/id_rsa"
     dest_key: "{{ lookup('env', 'HOME') }}/.ssh/id_rsa"
+    # macOS ships zsh at /bin/zsh; Arch's pacman package installs /usr/bin/zsh.
+    zsh_path: "{{ '/bin/zsh' if ansible_facts['os_family'] == 'Darwin' else '/usr/bin/zsh' }}"
   tasks:
     - include_tasks:
         file: tasks/dev-tools.yml
       tags:
+        - dev-tools
         - dev-dotfiles
         - projects
         - ssh

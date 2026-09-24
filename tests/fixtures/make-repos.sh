@@ -3,7 +3,7 @@
 # playbook clones. Paired with the url.insteadOf rewrite in the Dockerfile.
 set -euo pipefail
 
-REPOS=/srv/repos
+REPOS=${FAKE_REPOS:-/srv/repos}
 mkdir -p "$REPOS"
 work=$(mktemp -d)
 

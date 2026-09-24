@@ -71,8 +71,14 @@
         that: stowed.results | map(attribute='content') | map('b64decode') | select('search', 'managed by .dev') | list | length == 2
         fail_msg: stowed dotfiles do not contain the .dev fixture content
 
+    # macOS has no getent; its user database is read through dscl.
     - name: Read the invoking user's login shell
-      ansible.builtin.shell: 'getent passwd "$(id -un)" | cut -d: -f7'
+      ansible.builtin.shell: |
+        if command -v getent >/dev/null; then
+          getent passwd "$(id -un)" | cut -d: -f7
+        else
+          dscl . -read "/Users/$(id -un)" UserShell | awk '{print $2}'
+        fi
       register: login_shell
       changed_when: false
 
