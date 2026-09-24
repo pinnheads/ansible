@@ -15,7 +15,11 @@ FROM archlinux:latest
 ENV TERM=xterm
 ENV LANG=en_US.UTF-8
 
-RUN echo "en_US.UTF-8 UTF-8" > /etc/locale.gen && \
+# DisableSandbox: pacman's download sandbox needs seccomp, which fails under
+# x86_64 emulation on Apple Silicon (OrbStack/Docker Desktop). Harmless in a
+# throwaway test image.
+RUN sed -i '/^\[options\]/a DisableSandbox' /etc/pacman.conf && \
+    echo "en_US.UTF-8 UTF-8" > /etc/locale.gen && \
     locale-gen && \
     echo "LANG=en_US.UTF-8" > /etc/locale.conf && \
     pacman -Syu --noconfirm && \
