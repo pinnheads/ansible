@@ -27,7 +27,7 @@ RUN sed -i '/^\[options\]/a DisableSandbox' /etc/pacman.conf && \
         ansible sudo which \
         git make unzip gcc ripgrep fd fzf tree-sitter-cli lazygit nodejs lua \
         luarocks npm python-pip openssh neovim tmux ttf-jetbrains-mono stow \
-        zsh curl && \
+        zsh curl eza && \
     useradd -m -G wheel -s /bin/bash utsav && \
     echo "utsav ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers && \
     yes | pacman -Scc

@@ -23,6 +23,7 @@
       - stow
       - zsh
       - curl
+      - eza
   when: ansible_facts["os_family"] == "Archlinux"
   tags:
     - dev-tools
@@ -72,6 +73,7 @@
       - neovim
       - tmux
       - stow
+      - eza
     state: present
   when: ansible_facts["os_family"] == "Darwin"
   tags:
