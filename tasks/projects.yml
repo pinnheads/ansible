@@ -34,8 +34,8 @@
 
 - name: Cloning personal website project
   ansible.builtin.git:
-    repo: git@github.com:pinnheads/personal-website.git
-    dest: "{{ lookup('env', 'HOME') }}/personal/personal-website"
+    repo: git@github.com:pinnheads/personal-portfolio.git
+    dest: "{{ lookup('env', 'HOME') }}/personal/personal-portfolio"
     recursive: yes
     update: yes
     accept_hostkey: yes
