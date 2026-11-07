@@ -34,7 +34,7 @@
         - .dev
         - personal/.dev
         - personal/ansible
-        - personal/personal-website
+        - personal/personal-portfolio
 
     - name: Every repo was cloned
       ansible.builtin.assert:
