@@ -26,7 +26,7 @@ git commit -qam 'second commit'
 git clone -q --bare . "$REPOS/.dev.git"
 
 # The two project repos only need to exist and be clonable.
-for name in ansible personal-website; do
+for name in ansible personal-portfolio; do
     mkdir -p "$work/$name"
     cd "$work/$name"
     echo "# $name" > README.md
